@@ -120,13 +120,29 @@ def describe_table_schema() -> dict:
     }
 
 @mcp.tool()
-def scan_table(filters: Optional[Dict[str, str]] = None, start_key: Optional[dict] = None, limit: Optional[int] = 10) -> dict:
+def scan_table(filters: Optional[Dict[str, Dict[str, str]]] = None, start_key: Optional[dict] = None, limit: Optional[int] = 10) -> dict:
     """
     Scan the DynamoDB table with optional filters and start_key for pagination.
     Returns up to the specified limit of items per call after filtering.
 
     Parameters:
-    - filters: Dictionary of attribute-value pairs to filter results.
+    - filters: Dictionary of attribute conditions using the format:
+        {
+            "attributeName": {"operator": "value"}
+        }
+        Supported operators:
+        - eq: Equal to
+        - ne: Not equal to
+        - lt: Less than
+        - lte: Less than or equal to
+        - gt: Greater than
+        - gte: Greater than or equal to
+        - begins_with: Starts with the specified value
+        - contains: Contains the specified value
+        - between: Between two values - {"between": ["value1", "value2"]}
+        - in: In a list of values - {"in": ["value1", "value2", "value3"]}
+        - exists: Attribute exists - {"exists": true}
+        - not_exists: Attribute does not exist - {"not_exists": true}
     - start_key: Start key for pagination (from lastEvaluatedKey).
     - limit: Maximum number of items to return (default 10). Max value is 100.
 
@@ -140,16 +156,65 @@ def scan_table(filters: Optional[Dict[str, str]] = None, start_key: Optional[dic
     - If lastEvaluatedKey is present in the response, more results are available.
       You can retrieve these by passing this value as the start_key in a subsequent call.
     - Results are formatted as a table for better readability.
+    
+    Examples:
+    # Equal condition - find items where name is "John"
+    filters = {"name": {"eq": "John"}}
+    
+    # Multiple conditions - find items where age >= 30 AND job is "Developer"
+    filters = {
+        "age": {"gte": 30},
+        "job": {"eq": "Developer"}
+    }
+    
+    # Range search - find items where age is between 20 and 30
+    filters = {"age": {"between": [20, 30]}}
+    
+    # Contains search - find items where hobbies list contains "Reading"
+    filters = {"hobbies": {"contains": "Reading"}}
     """
     scan_kwargs = {}
     
     # 필터 조건 구성
     if filters:
         condition = None
-        for key, value in filters.items():
-            expr = Attr(key).eq(value)
-            condition = expr if condition is None else condition & expr
-        scan_kwargs["FilterExpression"] = condition
+        for key, condition_dict in filters.items():
+            for operator, value in condition_dict.items():
+                expr = None
+                
+                # 지원하는 연산자별 조건식 생성
+                if operator == 'eq':
+                    expr = Attr(key).eq(value)
+                elif operator == 'ne':
+                    expr = Attr(key).ne(value)
+                elif operator == 'lt':
+                    expr = Attr(key).lt(value)
+                elif operator == 'lte':
+                    expr = Attr(key).lte(value)
+                elif operator == 'gt':
+                    expr = Attr(key).gt(value)
+                elif operator == 'gte':
+                    expr = Attr(key).gte(value)
+                elif operator == 'begins_with':
+                    expr = Attr(key).begins_with(value)
+                elif operator == 'contains':
+                    expr = Attr(key).contains(value)
+                elif operator == 'between' and isinstance(value, list) and len(value) == 2:
+                    expr = Attr(key).between(value[0], value[1])
+                elif operator == 'in' and isinstance(value, list):
+                    expr = Attr(key).is_in(value)
+                elif operator == 'exists' and value:
+                    expr = Attr(key).exists()
+                elif operator == 'not_exists' and value:
+                    expr = Attr(key).not_exists()
+                
+                # 생성된 표현식을 기존 조건과 AND로 결합
+                if expr:
+                    condition = expr if condition is None else condition & expr
+                
+        # 필터 표현식 설정
+        if condition:
+            scan_kwargs["FilterExpression"] = condition
 
     # 페이지네이션 키 적용
     if start_key:
