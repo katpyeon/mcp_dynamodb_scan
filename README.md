@@ -1,4 +1,5 @@
 # DynamoDB Scanner
+[![smithery badge](https://smithery.ai/badge/@katpyeon/mcp_dynamodb_scan)](https://smithery.ai/server/@katpyeon/mcp_dynamodb_scan)
 
 > ## ⚠️ 주요 주의사항
 >
@@ -18,6 +19,14 @@ DynamoDB Scanner는 AWS DynamoDB 테이블을 스캔하고 필터링할 수 있�
 - AWS 콘솔과 유사한 사용자 경험
 
 ## 설치 및 설정
+
+### Installing via Smithery
+
+To install DynamoDB Scanner for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@katpyeon/mcp_dynamodb_scan):
+
+```bash
+npx -y @smithery/cli install @katpyeon/mcp_dynamodb_scan --client claude
+```
 
 ### 1. 저장소 복제
 
