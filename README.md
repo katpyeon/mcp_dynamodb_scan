@@ -1,24 +1,25 @@
 # DynamoDB Scanner
+
 [![smithery badge](https://smithery.ai/badge/@katpyeon/mcp_dynamodb_scan)](https://smithery.ai/server/@katpyeon/mcp_dynamodb_scan)
 
-> ## ⚠️ 주요 주의사항
+> ## ⚠️ Important Notice
 >
-> - DynamoDB Scan 작업은 전체 테이블 데이터를 탐색하므로 상당한 비용이 발생함
-> - 결과 최대 크기가 1MB로 제한되어 있어 필요한 모든 데이터를 얻기 위해서는 페이지네이션으로 추가 검색 필요
-> - 이 도구는 테스트 용도로만 사용 권장
-> - 프로덕션 환경에서는 본인의 데이터 접근 패턴에 맞게 Query 기능으로 재구현하는 것이 효율적
-> - 대규모 데이터 스캔 시 DynamoDB 처리량(RCU) 소비에 주의
+> - DynamoDB Scan operation scans the entire table, which can incur significant costs.
+> - The maximum result size is limited to 1MB, so you may need to use pagination to retrieve all desired data.
+> - This tool is recommended for testing purposes only.
+> - For production, it is more efficient to implement Query operations tailored to your data access patterns.
+> - Be aware of DynamoDB read capacity (RCU) consumption when scanning large datasets.
 
-DynamoDB Scanner는 AWS DynamoDB 테이블을 스캔하고 필터링할 수 있는 간편한 도구입니다. [FastMCP](https://github.com/michaelcurtis/fastmcp) 프레임워크를 기반으로 하며, AWS 콘솔과 유사한 방식으로 DynamoDB 테이블의 데이터를 탐색하고 필터링할 수 있습니다.
+DynamoDB Scanner is a simple tool for scanning and filtering AWS DynamoDB tables. It is based on the [FastMCP](https://github.com/michaelcurtis/fastmcp) framework and provides an experience similar to the AWS Console for exploring and filtering DynamoDB table data.
 
-## 주요 기능
+## Features
 
-- DynamoDB 테이블 스캔 (전체 또는 필터링)
-- 테이블 스키마 정보 확인
-- 페이지네이션 지원
-- AWS 콘솔과 유사한 사용자 경험
+- Scan DynamoDB tables (full or filtered)
+- View table schema information
+- Pagination support
+- User experience similar to AWS Console
 
-## 설치 및 설정
+## Installation & Setup
 
 ### Installing via Smithery
 
@@ -28,32 +29,32 @@ To install DynamoDB Scanner for Claude Desktop automatically via [Smithery](http
 npx -y @smithery/cli install @katpyeon/mcp_dynamodb_scan --client claude
 ```
 
-### 1. 저장소 복제
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/yourusername/mcp_dynamodb_scan.git
 cd mcp_dynamodb_scan
 ```
 
-### 2. 가상환경 설정
+### 2. Set Up Virtual Environment
 
 ```bash
-# 가상환경 생성
+# Create virtual environment
 python -m venv venv
 
-# 가상환경 활성화 (Windows)
+# Activate virtual environment (Windows)
 venv\Scripts\activate
 
-# 가상환경 활성화 (macOS/Linux)
+# Activate virtual environment (macOS/Linux)
 source venv/bin/activate
 
-# 의존성 패키지 설치
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Claude 설정
+### 3. Claude Profile Configuration
 
-이 프로젝트는 Claude와 함께 사용하도록 설계되었습니다. Claude Developer Console에서 다음과 같이 프로필을 설정하세요:
+This project is designed to work with Claude. Set up your profile in the Claude Developer Console as follows:
 
 ```json
 "dynamodb-scanner": {
@@ -69,31 +70,31 @@ pip install -r requirements.txt
 }
 ```
 
-위 설정에서 환경변수 항목에 적절한 값을 채워넣으세요:
+Fill in the environment variables with appropriate values:
 
-- `DYNAMO_TABLE_NAME`: 스캔할 DynamoDB 테이블 이름
-- `AWS_ACCESS_KEY_ID`: AWS 접근 키 ID
-- `AWS_SECRET_ACCESS_KEY`: AWS 보안 액세스 키
-- `AWS_REGION`: AWS 리전 (예: ap-northeast-2)
+- `DYNAMO_TABLE_NAME`: Name of the DynamoDB table to scan
+- `AWS_ACCESS_KEY_ID`: AWS Access Key ID
+- `AWS_SECRET_ACCESS_KEY`: AWS Secret Access Key
+- `AWS_REGION`: AWS Region (e.g., ap-northeast-2)
 
-## 사용법
+## Usage
 
-애플리케이션을 실행하려면:
+To run the application:
 
 ```bash
 python app.py
 ```
 
-이제 FastMCP 서버가 시작되며, Claude와 통합하여 DynamoDB 테이블을 스캔하고 필터링할 수 있습니다.
+The FastMCP server will start, and you can use it with Claude to scan and filter DynamoDB tables.
 
-### 예제 쿼리
+### Example Queries
 
-Claude에게 다음과 같은 요청을 할 수 있습니다:
+You can ask Claude:
 
-1. "테이블 스키마를 보여줘"
-2. "이름이 '홍길동'인 항목 찾아줘"
-3. "모든 사용자 정보를 보여줘"
+1. "Show me the table schema."
+2. "Find items where the name is 'Hong Gil-dong'."
+3. "Show me all user information."
 
-## 라이센스
+## License
 
-이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 LICENSE 파일을 참조하세요.
+This project is distributed under the MIT License. See the LICENSE file for details.
