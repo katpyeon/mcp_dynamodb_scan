@@ -1,0 +1,34 @@
+# Smithery configuration file: https://smithery.ai/docs/build/project-config
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - dynamoTableName
+      - awsAccessKeyId
+      - awsSecretAccessKey
+    properties:
+      dynamoTableName:
+        type: string
+        description: DynamoDB table name to scan
+      awsAccessKeyId:
+        type: string
+        description: AWS access key ID
+      awsSecretAccessKey:
+        type: string
+        description: AWS secret access key
+      awsRegion:
+        type: string
+        default: ap-northeast-2
+        description: AWS region
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'python', args: ['app.py'], env: { DYNAMO_TABLE_NAME: config.dynamoTableName, AWS_ACCESS_KEY_ID: config.awsAccessKeyId, AWS_SECRET_ACCESS_KEY: config.awsSecretAccessKey, AWS_REGION: config.awsRegion } })
+  exampleConfig:
+    dynamoTableName: MyTestTable
+    awsAccessKeyId: AKIAEXAMPLEKEYID
+    awsSecretAccessKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    awsRegion: us-west-2
