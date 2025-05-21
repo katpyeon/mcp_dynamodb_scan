@@ -98,3 +98,10 @@ You can ask Claude:
 ## License
 
 This project is distributed under the MIT License. See the LICENSE file for details.
+
+
+---
+
+<a href="https://www.buymeacoffee.com/katpyeon" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40" />
+</a>
