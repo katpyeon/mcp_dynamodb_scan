@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/katpyeon-mcp-dynamodb-scan-badge.png)](https://mseep.ai/app/katpyeon-mcp-dynamodb-scan)
+
 # DynamoDB Scanner
 
 [![smithery badge](https://smithery.ai/badge/@katpyeon/mcp_dynamodb_scan)](https://smithery.ai/server/@katpyeon/mcp_dynamodb_scan)
